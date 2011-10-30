@@ -167,7 +167,7 @@ nmap ee :lchdir %:p:h<CR>:pwd<CR>:Egrep<CR>
 ":let Grep_Xargs_Path = 'd:\unixcommand\xargs.exe'
 
 """"
-nmap <leader>bh:ConqueTerm cmd.exe 
+nmap sh :ConqueTerm cmd.exe<CR>
 
 
 
