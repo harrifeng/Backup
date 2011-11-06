@@ -29,6 +29,8 @@ set tabstop=4
 set expandtab 
 set softtabstop=4 
 
+set cc=80
+
 set guifont =Consolas:h10
 nmap lf :set guifont =Consolas:h16<CR>:set guifontwide=SimSun:h16<CR>
 nmap mf :set guifont =Consolas:h12<CR>:set guifontwide=SimSun:h12<CR>
