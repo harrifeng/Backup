@@ -115,3 +115,6 @@ load-path))
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
+;;org-mode
+(setq org-export-with-sub-superscripts nil) 
+
