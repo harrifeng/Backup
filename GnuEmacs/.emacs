@@ -186,3 +186,5 @@ try-complete-lisp-symbol))
             (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
             (define-key yas/keymap [tab] 'yas/next-field)))
 
+(setq default-frame-alist 
+'((height . 42) (width . 140) (menu-bar-lines . 0) (tool-bar-lines . 0)))
