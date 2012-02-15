@@ -194,3 +194,12 @@ endfunction
 "au BufRead * call Blank_Sign()
 nmap ww :au BufRead * call Blank_Sign()
 
+
+inoremap <c-k> <c-n>
+inoremap <c-p> <up>
+inoremap <c-n> <down>
+inoremap <c-e> <end>
+inoremap <c-a> <home>
+inoremap <c-b> <left>
+inoremap <c-f> <right>
+inoremap <c-d> <del>
