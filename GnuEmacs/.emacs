@@ -8,6 +8,8 @@ load-path))
 (defun my-cc-mode()
   ;(c-toggle-auto-state)              ;自动换行
   ;(c-toggle-auto-hungry-state 1)
+  (setq tab-width 4)
+  (setq default-fill-column 80);默认显示 xx列就换行
   (c-set-style "bsd"))
 (add-hook 'c-mode-hook 'my-cc-mode)
 (defun my-c++-mode()
@@ -16,18 +18,18 @@ load-path))
   (c-set-style "stroustrup"))
 (add-hook 'c++-mode-hook 'my-c++-mode)
 
-;; Setting English Font
-;(set-face-attribute
-  ;'default nil :font "Monaco 17")
+;; Setting English Font: this works fine for windows 7
+(set-face-attribute
+  'default nil :font "Consolas 10")
  
 ;;; Chinese Font
-;(dolist (charset '(kana han symbol cjk-misc bopomofo))
-    ;(set-fontset-font (frame-parameter nil 'font)
-                      ;charset
-                      ;(font-spec :family "Song" :size 12)))
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+                      charset
+                      (font-spec :family "SimSun" :size 12)))
 
-(set-frame-font "Consolas-16")
-(set-fontset-font "fontset-default" 'han '("STSong" . "unicode-bmp"))
+;(set-frame-font "Consolas-16")
+;(set-fontset-font "fontset-default" 'han '("STSong" . "unicode-bmp"))
 
 ;;设置颜色搭配
 (require 'color-theme)
@@ -188,3 +190,24 @@ try-complete-lisp-symbol))
 
 (setq default-frame-alist 
 '((height . 42) (width . 140) (menu-bar-lines . 0) (tool-bar-lines . 0)))
+
+;; 高亮结尾白空格
+;; 设置颜色
+(custom-set-faces
+ '(my-tab-face            ((((class color)) (:background "green10"))) t)
+ '(my-trailing-space-face ((((class color)) (:background "green10"))) t)
+ '(my-long-line-face ((((class color)) (:background "green10"))) t))
+
+;; 辅助函数，用来给指定模式添加超过80列的高亮功能
+(defun cc-mode-add-keywords (mode)
+  (font-lock-add-keywords
+   mode
+   '(("\t+" (0 'my-tab-face append))
+     ("^.\\{81\\}\\(.+\\)$" (1 'my-long-line-face append)))))
+
+;; 对指定模式使用"超过80列高亮"功能
+(cc-mode-add-keywords 'c-mode)
+(cc-mode-add-keywords 'cc-mode)
+(cc-mode-add-keywords 'c++-mode)
+(cc-mode-add-keywords 'perl-mode)
+(cc-mode-add-keywords 'python-mode)
