@@ -1,0 +1,344 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Basic Setting, no plugin is need. :help keywords for help
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"This setting make sure that the $VIM folder can be accessed
+"if has("linux")
+    ":let $VIM = "/home/hfeng/.vim"
+"endif
+
+"not compatible with VI
+set nocompatible
+
+"some setting from example
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+"source $VIMRUNTIME/delmenu.vim
+"source $VIMRUNTIME/menu.vim
+behave mswin
+
+"show line number
+set number
+
+"Will not wrap if the line is too long
+set nowrap
+
+"ignore the case in search, this is very safe way 
+set ignorecase
+
+"no bell and message setting
+set noerrorbells
+set shortmess=atI
+
+"automatically change directory, important for nerdtree plugin
+"This setting conflicts with many plugins
+set autochdir 
+
+"utf-8 setting
+"handle gibberish code in text file (处理文本中显示乱码)
+set encoding=utf-8
+set fileencodings=utf-8,chinese,latin-1
+"windows has a different file encoding name with other OS
+if has("win32")
+    set fileencoding=chinese
+else
+    set fileencoding=utf-8
+endif
+
+"handle gibberish code in menu & right click menu (处理菜单及右键菜单乱码)
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+"handle gibberish code in console (处理console输出乱码)
+language messages zh_CN.utf-8
+
+"TAB setting
+set shiftwidth=4
+set tabstop=4
+set expandtab 
+set softtabstop=4 
+
+"Font setting
+if has('win32') || has('win64')
+    set guifont =Consolas:h10
+    set guifontwide=SimSun:h10
+    nmap lf :set guifont =Consolas:h16<CR>:set guifontwide=SimSun:h16<CR>
+    nmap mf :set guifont =Consolas:h12<CR>:set guifontwide=SimSun:h12<CR>
+    nmap sf :set guifont =Consolas:h10<CR>:set guifontwide=SimSun:h10<CR>
+    "nmap sf :set guifont =YaHei\ Consolas\ Hybrid:h13<CR>
+elseif has('mac')
+    set guifont =Monaco:h12<CR> 
+    nmap sf :set guifont =Monaco:h12<CR>
+    nmap mf :set guifont =Monaco:h15<CR>
+    nmap lf :set guifont =Monaco:h17<CR>
+else
+    set guifont =YaHei\ Consolas\ Hybrid\ 13
+    "nmap mf :set guifont =YaHei\ Consolas\ Hybrid:h15<CR>
+endif
+
+"Windows size initially
+if has('gui_running') && has('win32')
+    au GUIENTER * simalt ~x
+else
+    winpos 0 0
+    set lines=80
+    set columns=160
+endif
+
+set cc=80
+
+"backup setting
+set nobackup
+set nowritebackup
+
+"Menu bar removed
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
+set guioptions-=b
+
+"Show time & date
+set laststatus=2
+set statusline=%f\ %m\ %r\ %=\ ln:%-03l/%-03L\ col:%-03c\ buf:%n\ 
+set statusline+=%{strftime(\"%Y-%m-%d\ %H:%M\")}
+
+"Move efficiently between windows
+nmap <C-H> <C-W><C-H>
+nmap <C-J> <C-W><C-J>
+nmap <C-K> <C-W><C-K>
+nmap <C-L> <C-W><C-L>
+
+"show tabs which are not convert to spaces SL
+set listchars=tab:>-,nbsp:-
+nmap sl : set list<CR>
+nmap sn : set nolist<CR>
+
+"highlight what I select in version mode, written by myself
+vmap hl y/<C-R>"<CR>
+
+"emacs-like operation
+nmap ye y$
+nmap ya y0
+nmap de d$
+nmap da d0
+
+" <F5> delete space at end and replace tab with spaces 
+map <F5> :call HandleSpace()<CR>
+func! HandleSpace()
+    :%s/\s\+$//
+    :%retab!
+endfunc
+
+"set cmdline height to 2, which looks cool
+set cmdheight=2
+
+"quick windows operation
+nmap qq :quit<CR>
+nmap sp :sp<CR>
+nmap vp :vsp<CR>
+nmap ol :only<CR>
+
+"Set mapleader to comma, as keymapping maybe different
+let mapleader = ","
+
+"can only set transparent for macvim gui version
+if has('mac') && has('gui_running')
+   set transparency=0
+   nmap ts : set transparency=11<CR>
+   nmap ns : set transparency=0<CR>
+else
+   nmap ts : call libcallnr("vimtweak.dll", "SetAlpha", 190)<CR>
+   nmap ns : call libcallnr("vimtweak.dll", "SetAlpha", 255)<CR> 
+endif
+
+" Bash like keys for the command line
+cnoremap <C-A>      <Home>
+cnoremap <C-E>      <End>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Advanced Setting, .vim plugin needed
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"----------------------------------------------------
+"Requires /plugin/yankring.vim
+"----------------------------------------------------
+:nnoremap <silent> yr :YRShow<CR>
+
+"----------------------------------------------------
+"Requires /plugin/mark.vim
+"----------------------------------------------------
+nmap mk <Plug>MarkSet 
+vmap mk <Plug>MarkSet
+nmap mr <Plug>MarkRegex 
+vmap mr <Plug>MarkRegex
+nmap mc <Plug>Mark
+nmap mn <leader>/
+
+"----------------------------------------------------
+"Requires /colors/*.vim
+"----------------------------------------------------
+set background="dark"
+let g:molokai_original = 1
+colorscheme molokai 
+
+"molokai black
+nmap mb : let g:molokai_original = 0<CR> :colorscheme molokai<CR>
+"molokai grey
+nmap mg : let g:molokai_original = 1<CR> :colorscheme molokai<CR>
+
+nmap so : colorscheme solarized<CR>
+nmap dz : colorscheme darkZ<CR>
+nmap tg : colorscheme tango2<CR>
+
+"----------------------------------------------------
+"Requires /plugin/NERD_tree.vim
+"         /nerdtree_plugin/*.vim
+"----------------------------------------------------
+let NERDTreeBookmarksFile = $VIM.'/NERDTREE_BOOKMARK'
+nmap nt :NERDTreeToggle<CR> 
+nmap nf :NERDTreeFind<CR>
+nmap nm :NERDTreeMirror<CR>
+if has('win32') || has('win64')
+    nmap nc :NERDTree c://<CR>
+    nmap nd :NERDTree d://<CR>
+    nmap nh :NERDTree ~//<CR>
+else
+    nmap nh :NERDTree ~/<CR>
+endif 
+
+"----------------------------------------------------
+"Requires /plugin/mru.vim
+"----------------------------------------------------
+let MRU_File = $VIM.'/VIM_MRU_FILES'
+let MRU_Max_Entries = 1000
+let MRU_Add_Menu = 0
+map fh :MRU <CR>
+
+"----------------------------------------------------
+"Requires /plugin/taglist.vim
+"----------------------------------------------------
+nnoremap <silent> <F8> :TlistToggle<CR>
+"select ctags path
+if has('win32') || has('win64')
+    let Tlist_Ctags_Cmd = $VIM.'/vimfiles/UsefulCommand/ctags.exe'
+
+    "Only current file shown 
+    let Tlist_Show_One_File=1
+
+    "Last window left, close it
+    let Tlist_Exit_OnlyWindow=1
+    let Tlist_File_Fold_Auto_Close=1
+
+    "Right side
+    let Tlist_Use_Right_Window=1 
+    let Tlist_Show_Menu=1
+elseif has('mac') 
+    "need: >sudo port install ctags for mac
+    let Tlist_Ctags_Cmd = '/opt/local/bin/ctags'
+endif
+
+"shown after start up
+"let Tlist_Auto_Open=1 
+let Tlist_WinWidth = 60
+nmap tl :TlistToggle<CR>
+
+"----------------------------------------------------
+"Requires /plugin/bufexplorer.vim
+"----------------------------------------------------
+nmap bf :sil! BufExplorer<CR>
+nmap bs :sil! BufExplorerHorizontalSplit<CR>
+
+"----------------------------------------------------
+"Requires /plugin/grep.vim
+"----------------------------------------------------
+nmap se :lchdir %:p:h<CR>:pwd<CR>:Grep -i<CR>
+nmap su :lchdir %:p:h<CR>:pwd<CR>:Grep<CR>
+nmap sr :lchdir %:p:h<CR>:pwd<CR>:Rgrep -i<CR>
+nmap ee :lchdir %:p:h<CR>:pwd<CR>:Egrep<CR>
+
+:let Grep_Skip_Files = '*.bak *~ *.exe' 
+:let Grep_Default_Filelist = '*.*' 
+
+if has('win32') || has('win64')
+    "This setting is werid, should be set in this way, 
+    "and can not be found in documentation
+    :let Grep_Shell_Quote_Char = '"'
+
+    "should be backslash in windows-platform
+    :let Grep_Path =  $VIM.'\vimfiles\UsefulCommand\grep.exe'
+    :let Fgrep_Path = $VIM.'\vimfiles\UsefulCommand\fgrep.exe'
+    :let Egrep_Path = $VIM.'\vimfiles\UsefulCommand\egrep.exe'
+    :let Agrep_Path = $VIM.'\vimfiles\UsefulCommand\agrep.exe'
+    :let Grep_Find_Path = $VIM.'\vimfiles\UsefulCommand\find.exe'
+    :let Grep_Xargs_Path = $VIM.'\vimfiles\UsefulCommand\xargs.exe'
+    :let Grep_Cygwin_Find = 1
+endif
+
+"----------------------------------------------------
+"Requires /plugin/conque_term.vim 
+"and python 2.7.1 (32-bit)
+"----------------------------------------------------
+let g:ConqueTerm_FastMode = 1
+if has('win32') || has('win64') 
+    nmap sh :ConqueTerm powershell.exe<CR>
+    nmap cm :ConqueTerm cmd.exe<CR>
+    nmap cy :ConqueTerm c:/cygwin/bin/bash.exe --login -i<CR>
+elseif has('mac') 
+    nmap sh :ConqueTerm bash<CR>
+endif
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Obsolete Setting, No used anymore, but is meaningful for 
+"future study 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"----------------------------------------------------
+" change the shell to pwd, it is not used any more
+"----------------------------------------------------
+"nnoremap <silent> <F1> :lchdir %:p:h<CR>:pwd<CR>
+
+"----------------------------------------------------
+" high light current line
+"----------------------------------------------------
+"set cursorline
+
+"----------------------------------------------------
+" spell checking 
+"----------------------------------------------------
+"set spell
+
+"----------------------------------------------------
+" resize windows
+"----------------------------------------------------
+"nmap hi :res+1<CR> 
+"nmap hd :res-1<CR> 
+"nmap wi :vertical res+1<CR> 
+"nmap wd :vertical res-1<CR> 
+
+"----------------------------------------------------
+" tags may need to be CReated by ctags 
+"----------------------------------------------------
+"set tags=tags; 
+
+"----------------------------------------------------
+"  folding setting
+"----------------------------------------------------
+"set foldmethod=indent 
+"set tags=tags; 
+
+"----------------------------------------------------
+" delete void line
+"----------------------------------------------------
+":%g/^$/d
+
+"----------------------------------------------------
+" Monaco font is for all the mac os, we use yahei &
+" consolas Hybrid fond because it mixed english and
+" chinese font very well
+"----------------------------------------------------
+"set guifont =Monaco:h12  
+"nmap lf :set guifont =Monaco:h17<CR>
+"nmap mf :set guifont =Monaco:h13<CR>
+"nmap sf :set guifont =Monaco:h12<CR>
+"
+"
